@@ -203,7 +203,7 @@ class Win(WinGUI):
 
         config = configparser.ConfigParser()
         config.read('config.ini')
-        INFO(config.has_section('login'))
+        INFO("Login %s" % config.has_section('login'))
         if not config.has_section('login'):
            self.__lock()
            self.login()
