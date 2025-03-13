@@ -1,2 +1,5 @@
 __pycache__
 config.ini
+env
+tools/__pycache__
+utils/__pycache__
