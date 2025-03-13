@@ -2,7 +2,6 @@
 import threading
 import win32gui
 import keyboard
-import random
 from time import sleep
 from tkinter import END, IntVar 
 from tkinter import messagebox
@@ -361,7 +360,7 @@ class AutoFollow(threading.Thread):
 
         DEBUG("AutoFollow run")
         while(self.state == 'run'):
-            self.keyboard.key_press('k')
+            self.keyboard.key_press('j')
             sleep(1)
         DEBUG("AutoFollow stop")
         keyboard.unhook_all()
@@ -389,8 +388,8 @@ class LockTarget(threading.Thread):
 
         DEBUG("AutoFollow run")
         while(self.state == 'run'):
-            self.keyboard.key_press('l')
-            sleep(1)
+            self.keyboard.key_press('k')
+            sleep(0.5)
         DEBUG("AutoFollow stop")
         keyboard.unhook_all()
         # 结束
@@ -416,7 +415,7 @@ class AutoAttack(threading.Thread):
 
         DEBUG("AutoFollow run")
         while(self.state == 'run'):
-            self.keyboard.key_press('j')
+            self.keyboard.key_press('l')
             sleep(2)
         DEBUG("AutoFollow stop")
         keyboard.unhook_all()
