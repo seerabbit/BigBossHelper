@@ -1,7 +1,7 @@
 # Introduction
 WoW Tools
 
-## Marco
+## Macro
 ### AutoFollow
 /script if not UnitAffectingCombat("player") then if not UnitCanAttack("player","target") or UnitIsDead("target") then FollowUnit("爆裂莲雾") end end  
 
