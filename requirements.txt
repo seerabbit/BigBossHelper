@@ -1,0 +1,3 @@
+ttkbootstrap
+keyboard
+pywin32
