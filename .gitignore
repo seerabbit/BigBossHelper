@@ -3,3 +3,6 @@ config.ini
 env
 tools/__pycache__
 utils/__pycache__
+build
+dist
+*.spec
