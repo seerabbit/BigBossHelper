@@ -27,6 +27,10 @@ class Controller:
         self.follow = IntVar()
         self.target = IntVar()
         self.attack = IntVar()
+        self.keyhelper_t = None
+        self.follow_t = None
+        self.target_t = None
+        self.attack_t = None
         self.__check_button_init()
 
     def __find_window(self, hwnd, windows = list):
@@ -107,10 +111,14 @@ class Controller:
        
         if (self.ui.tk_button_button_func_2.cget("text") == "Stop"):
             self.ui.tk_button_button_func_2.config(text="Start")
-            self.keyhelper_t.stop()
-            self.follow_t.stop()
-            self.target_t.stop()
-            self.attack_t.stop()
+            if self.keyhelper_t:
+                self.keyhelper_t.stop()
+            if self.follow_t:
+                self.follow_t.stop()
+            if self.target_t:
+                self.target_t.stop()
+            if self.attack_t:
+                self.attack_t.stop()
             self.ui.tk_check_button_func_1.config(state="active")
             self.ui.tk_check_button_func_2.config(state="active")
             self.ui.tk_check_button_func_3.config(state="active")
