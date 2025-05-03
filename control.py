@@ -25,12 +25,9 @@ class Controller:
         self.mirror = IntVar()
         self.interact = IntVar()
         self.follow = IntVar()
-        self.target = IntVar()
-        self.attack = IntVar()
         self.keyhelper_t = None
         self.follow_t = None
-        self.target_t = None
-        self.attack_t = None
+        self.petmode_t = None
         self.__check_button_init()
 
     def __find_window(self, hwnd, windows = list):
@@ -54,10 +51,6 @@ class Controller:
         self.interact.set(0)
         self.ui.tk_check_button_func_3.config(variable=self.follow)
         self.follow.set(0)
-        self.ui.tk_check_button_func_4.config(variable=self.target)
-        self.target.set(0)
-        self.ui.tk_check_button_func_5.config(variable=self.attack)
-        self.target.set(0)
 
     def get_keyboard(self):
         self.keyboard = Virtual_Keyboard(self.hwnd)
@@ -115,15 +108,9 @@ class Controller:
                 self.keyhelper_t.stop()
             if self.follow_t:
                 self.follow_t.stop()
-            if self.target_t:
-                self.target_t.stop()
-            if self.attack_t:
-                self.attack_t.stop()
             self.ui.tk_check_button_func_1.config(state="active")
             self.ui.tk_check_button_func_2.config(state="active")
             self.ui.tk_check_button_func_3.config(state="active")
-            self.ui.tk_check_button_func_4.config(state="active")
-            self.ui.tk_check_button_func_5.config(state="active")
         else:
             if self.hwnd is None:
                 messagebox.showerror("", "没有绑定WoW窗口?")
@@ -134,8 +121,6 @@ class Controller:
             self.ui.tk_check_button_func_1.config(state="disabled")
             self.ui.tk_check_button_func_2.config(state="disabled")
             self.ui.tk_check_button_func_3.config(state="disabled")
-            self.ui.tk_check_button_func_4.config(state="disabled")
-            self.ui.tk_check_button_func_5.config(state="disabled")
 
             self.keyhelper_t = KeyHelper(self, self.hwnd, self.mirror.get(), self.interact.get())
             self.keyhelper_t.start()
@@ -144,13 +129,6 @@ class Controller:
                 self.follow_t = AutoFollow(self, self.hwnd)
                 self.follow_t.start()
 
-            if self.target.get():
-                self.target_t = LockTarget(self, self.hwnd)
-                self.target_t.start()
-
-            if self.attack.get():
-                self.attack_t = AutoAttack(self, self.hwnd)
-                self.attack_t.start()
 
     def onClick3(self,evt):
         INFO("onClick3 <Button-1> 事件处理: %s" % evt)
@@ -174,6 +152,23 @@ class Controller:
             self.ui.tk_button_button_func_3.config(text="Stop")
             self.herbshelper_t = HerbsHelper(self, self.hwnd)
             self.herbshelper_t.start()
+
+    def onClick4(self,evt):
+        INFO("onClick4 <Button-1> 事件处理: %s" % evt)
+       
+        if (self.ui.tk_button_button_func_4.cget("text") == "Stop"):
+            self.ui.tk_button_button_func_4.config(text="Start")
+            if self.petmode_t:
+                self.petmode_t.stop()
+        else:
+            if self.hwnd is None:
+                messagebox.showerror("", "没有绑定WoW窗口?")
+                return
+            
+            self.ui.tk_button_button_func_4.config(text="Stop")
+            self.petmode_t = PetMode(self, self.hwnd, self.mirror.get(), self.interact.get())
+            self.petmode_t.start()
+
 
 class OreHelper(threading.Thread):
     INTERVAL = 3
@@ -361,62 +356,6 @@ class AutoFollow(threading.Thread):
         self.daemon = True
         self.state = "idel"
         self.keyboard = controler.get_keyboard()
-        self.signal = threading.Event()
-
-    def run(self):
-        self.state = "run"
-
-        DEBUG("AutoFollow run")
-        while(self.state == 'run'):
-            self.keyboard.key_press('j')
-            sleep(1)
-        DEBUG("AutoFollow stop")
-        keyboard.unhook_all()
-        # 结束
-        self.state = "idel"
-
-    def stop(self):
-        if self.state == "run":
-            self.signal.set()
-            self.state = "stop"
-        
-class LockTarget(threading.Thread):
-
-    def __init__(self, controler = Controller, hwnd = int):
-        super().__init__()
-        self.controler = controler
-        self.wow_hwnd = hwnd
-        self.daemon = True
-        self.state = "idel"
-        self.keyboard = controler.get_keyboard()
-        self.signal = threading.Event()
-
-    def run(self):
-        self.state = "run"
-
-        DEBUG("AutoFollow run")
-        while(self.state == 'run'):
-            self.keyboard.key_press('k')
-            sleep(0.5)
-        DEBUG("AutoFollow stop")
-        keyboard.unhook_all()
-        # 结束
-        self.state = "idel"
-
-    def stop(self):
-        if self.state == "run":
-            self.signal.set()
-            self.state = "stop"
-
-class AutoAttack(threading.Thread):
-    def __init__(self, controler = Controller, hwnd = int):
-        super().__init__()
-        self.controler = controler
-        self.wow_hwnd = hwnd
-        self.daemon = True
-        self.state = "idel"
-        self.keyboard = controler.get_keyboard()
-        self.signal = threading.Event()
 
     def run(self):
         self.state = "run"
@@ -424,13 +363,123 @@ class AutoAttack(threading.Thread):
         DEBUG("AutoFollow run")
         while(self.state == 'run'):
             self.keyboard.key_press('l')
-            sleep(2)
+            sleep(1)
         DEBUG("AutoFollow stop")
-        keyboard.unhook_all()
         # 结束
         self.state = "idel"
 
     def stop(self):
         if self.state == "run":
+            self.state = "stop"
+
+class PetMode(threading.Thread):
+    def __init__(self, controler = Controller, hwnd = int):
+        super().__init__()
+        self.controler = controler
+        self.wow_hwnd = hwnd
+        self.daemon = True
+        self.state = "idel"
+        self.keyboard = controler.get_keyboard()
+        self.signal = threading.Event()
+        self.auto_attack_t = None
+        self.auto_follow_t = None
+
+    def run(self):
+        self.state = "run"
+
+        DEBUG("PetMode run")
+        keyboard.on_press(self.on_key_press)
+
+        self.signal.wait()
+
+        DEBUG("PetMode stop")
+        keyboard.unhook_all()
+        if self.auto_attack_t != None:
+            self.auto_attack_t.stop()
+            self.auto_attack_t = None
+        if self.auto_follow_t != None:
+            self.auto_follow_t.stop()
+            self.auto_follow_t = None
+
+        # 结束
+        self.state = "idel"
+        self.controler.ui.tk_button_button_func_4.config(text="Start")
+
+    def stop(self):
+        if self.state == "run":
             self.signal.set()
             self.state = "stop"
+
+    def on_key_press(self, event):
+        DEBUG("press %s" % event.name)
+        # attack
+        if event.name == "f1":
+            if self.auto_attack_t == None:
+                self.auto_attack_t = self.AutoAttack(self.controler)
+                self.auto_attack_t.start()
+            else:
+                self.auto_attack_t.stop()
+                self.auto_attack_t = None
+
+        if event.name == "f2":
+            if self.auto_follow_t == None:
+                self.auto_follow_t = self.AutoFollow(self.controler)
+                self.auto_follow_t.start()
+            else:
+                self.auto_follow_t.stop()
+                self.auto_follow_t = None
+
+        if event.name == "f3":
+            self.keyboard.key_press('f3')
+        if event.name == "f4":
+            self.keyboard.key_press('f4')
+        if event.name == "f5":
+            self.keyboard.key_press('f5')
+
+    class AutoAttack(threading.Thread):
+
+        def __init__(self, controler = Controller):
+            super().__init__()
+            self.controler = controler
+            self.daemon = True
+            self.state = "idel"
+            self.keyboard = controler.get_keyboard()
+
+        def run(self):
+            self.state = "run"
+
+            DEBUG("AutoAttack run")
+            while(self.state == 'run'):
+                self.keyboard.key_press('f1')
+                sleep(1)
+            DEBUG("AutoAttack stop")
+            # 结束
+            self.state = "idel"
+
+        def stop(self):
+            if self.state == "run":
+                self.state = "stop"
+
+    class AutoFollow(threading.Thread):
+
+        def __init__(self, controler = Controller,):
+            super().__init__()
+            self.controler = controler
+            self.daemon = True
+            self.state = "idel"
+            self.keyboard = controler.get_keyboard()
+
+        def run(self):
+            self.state = "run"
+
+            DEBUG("AutoFollow run")
+            while(self.state == 'run'):
+                self.keyboard.key_press('f2')
+                sleep(1)
+            DEBUG("AutoFollow stop")
+            # 结束
+            self.state = "idel"
+
+        def stop(self):
+            if self.state == "run":
+                self.state = "stop"

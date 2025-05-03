@@ -11,7 +11,7 @@ from ttkbootstrap import Button, Scrollbar, Label, Frame, Combobox, Notebook, Ch
 from utils.Log import *
 from utils.PassWord import KeyWorks
 
-BUILD_VERSION = "V1.0.0"
+BUILD_VERSION = "V1.1.0"
 
 class WinGUI(Tk):
     def __init__(self):
@@ -28,14 +28,16 @@ class WinGUI(Tk):
         self.tk_check_button_func_1 = self.__tk_check_button_func_1( self.tk_label_frame_func_2)
         self.tk_check_button_func_2 = self.__tk_check_button_func_2( self.tk_label_frame_func_2)
         self.tk_check_button_func_3 = self.__tk_check_button_func_3( self.tk_label_frame_func_2)
-        self.tk_check_button_func_4 = self.__tk_check_button_func_4( self.tk_label_frame_func_2)
-        self.tk_check_button_func_5 = self.__tk_check_button_func_5( self.tk_label_frame_func_2)
         self.tk_button_button_func_2 = self.__tk_button_button_func_2( self.tk_label_frame_func_2)
 
         self.tk_label_frame_func_3 = self.__tk_label_frame_func_3( self.tk_tabs_notebook_1)
         self.tk_label_lable_amount_3 = self.__tk_label_lable_amount_func_3( self.tk_label_frame_func_3) 
         self.tk_input_input_amount_3 = self.__tk_input_input_amount_func_3( self.tk_label_frame_func_3) 
-        self.tk_button_button_func_3 = self.__tk_button_button_func_3( self.tk_label_frame_func_3) 
+        self.tk_button_button_func_3 = self.__tk_button_button_func_3( self.tk_label_frame_func_3)
+
+        self.tk_label_frame_func_4 = self.__tk_label_frame_func_4( self.tk_tabs_notebook_1)
+        self.tk_button_button_func_4 = self.__tk_button_button_func_4( self.tk_label_frame_func_4)
+
 
     def __win(self):
         # 设置标题
@@ -161,14 +163,6 @@ class WinGUI(Tk):
         cb = Checkbutton(parent, text="自动跟随", onvalue=1, offvalue=0)
         cb.place(x=180*self.scaleFactor, y=10*self.scaleFactor, width=70*self.scaleFactor, height=30*self.scaleFactor)
         return cb
-    def __tk_check_button_func_4(self,parent):
-        cb = Checkbutton(parent, text="锁定目标", onvalue=1, offvalue=0)
-        cb.place(x=270*self.scaleFactor, y=10*self.scaleFactor, width=70*self.scaleFactor, height=30*self.scaleFactor)
-        return cb
-    def __tk_check_button_func_5(self,parent):
-        cb = Checkbutton(parent, text="自动攻击", onvalue=1, offvalue=0)
-        cb.place(x=360*self.scaleFactor, y=10*self.scaleFactor, width=70*self.scaleFactor, height=30*self.scaleFactor)
-        return cb
     def __tk_button_button_func_2(self,parent):
         btn = Button(parent, text="Start", takefocus=False, padding="center")
         btn.place(x=460*self.scaleFactor, y=10*self.scaleFactor, width=60*self.scaleFactor, height=30*self.scaleFactor)
@@ -188,6 +182,16 @@ class WinGUI(Tk):
         ipt.place(x=70*self.scaleFactor, y=10*self.scaleFactor, width=80*self.scaleFactor, height=30*self.scaleFactor)
         return ipt
     def __tk_button_button_func_3(self,parent):
+        btn = Button(parent, text="Start", takefocus=False, padding="center")
+        btn.place(x=460*self.scaleFactor, y=10*self.scaleFactor, width=60*self.scaleFactor, height=30*self.scaleFactor)
+        return btn
+    
+    # PetMode
+    def __tk_label_frame_func_4(self, parent):
+        frame = LabelFrame(parent,text="PetMode",)
+        frame.place(x=10*self.scaleFactor, y=185*self.scaleFactor, width=535*self.scaleFactor, height=80*self.scaleFactor)
+        return frame
+    def __tk_button_button_func_4(self,parent):
         btn = Button(parent, text="Start", takefocus=False, padding="center")
         btn.place(x=460*self.scaleFactor, y=10*self.scaleFactor, width=60*self.scaleFactor, height=30*self.scaleFactor)
         return btn
@@ -216,6 +220,7 @@ class Win(WinGUI):
         self.tk_button_button_func_1.bind('<Button-1>',self.ctl.onClick)
         self.tk_button_button_func_2.bind('<Button-1>',self.ctl.onClick2)
         self.tk_button_button_func_3.bind('<Button-1>',self.ctl.onClick3)
+        self.tk_button_button_func_4.bind('<Button-1>',self.ctl.onClick4)
         self.bind('<FocusIn>', self.ctl.onWindowFocusIn)
         pass
     def __style_config(self):
