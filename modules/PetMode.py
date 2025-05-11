@@ -1,13 +1,13 @@
-
 import threading
 import keyboard
 
 from time import sleep
-from utils.Log import *
+from utils.Log import DEBUG
 from widget.FloatingWindow import FloatingWindow
 
+
 class PetMode(threading.Thread):
-    def __init__(self, controler, hwnd = int):
+    def __init__(self, controler, hwnd=int):
         super().__init__()
         self.controler = controler
         self.wow_hwnd = hwnd
@@ -33,7 +33,7 @@ class PetMode(threading.Thread):
         keyboard.unhook_all()
         self.float_window.stop()
         self.float_window = None
-        if self.auto_attack_t != None:
+        if self.auto_attack_t is not None:
             self.auto_attack_t.stop()
             self.auto_attack_t = None
 
@@ -52,7 +52,7 @@ class PetMode(threading.Thread):
         DEBUG("press %s" % event.name)
         # attack
         if event.name == "f1":
-            self.keyboard.key_press('k')
+            self.keyboard.key_press("k")
             if self.auto_attack_t is None:
                 self.auto_attack_t = self.AutoAttack(self.controler)
                 self.auto_attack_t.start()
@@ -64,18 +64,17 @@ class PetMode(threading.Thread):
                 self.auto_attack_t.stop()
                 self.auto_attack_t = None
                 self.attack = False
-            self.keyboard.key_press('l')
+            self.keyboard.key_press("l")
             self.float_window.blink(False)
 
         if event.name == "f3":
-            self.keyboard.key_press('f3')
+            self.keyboard.key_press("f3")
         if event.name == "f4":
-            self.keyboard.key_press('f4')
+            self.keyboard.key_press("f4")
         if event.name == "f5":
-            self.keyboard.key_press('f5')
+            self.keyboard.key_press("f5")
 
     class AutoAttack(threading.Thread):
-
         def __init__(self, controler):
             super().__init__()
             self.controler = controler
@@ -87,8 +86,8 @@ class PetMode(threading.Thread):
             self.state = "run"
 
             DEBUG("AutoAttack run")
-            while(self.state == 'run'):
-                self.keyboard.key_press('f1')
+            while self.state == "run":
+                self.keyboard.key_press("f1")
                 sleep(1)
             DEBUG("AutoAttack stop")
             # 结束

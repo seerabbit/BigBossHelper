@@ -1,7 +1,4 @@
-
-import threading
 import win32gui
-import keyboard
 from time import sleep
 
 from tkinter import messagebox
@@ -11,14 +8,17 @@ from modules.KeyHelper import KeyHelper
 from modules.OreHelper import OreHelper
 from modules.PetMode import PetMode
 from tools.virtual_keyboard import Virtual_Keyboard
-from utils.Log import *
-from tkinter import END, IntVar, X, Y, LEFT, RIGHT
+from utils.Log import INFO, DEBUG
+from tkinter import IntVar
+
 
 class Controller:
     # 导入UI类后，替换以下的 object 类型，将获得 IDE 属性提示功能
     ui: object
+
     def __init__(self):
         pass
+
     def init(self, ui):
         """
         得到UI实例,对组件进行初始化配置
@@ -35,8 +35,8 @@ class Controller:
         self.petmode_t = None
         self.__check_button_init()
 
-    def __find_window(self, hwnd, windows = list):
-        if win32gui.GetWindowText(hwnd) == '魔兽世界':
+    def __find_window(self, hwnd, windows=list):
+        if win32gui.GetWindowText(hwnd) == "魔兽世界":
             temp = []
             temp.append(hex(hwnd))
             temp.append(win32gui.GetClassName(hwnd))
@@ -60,15 +60,15 @@ class Controller:
     def get_keyboard(self):
         self.keyboard = Virtual_Keyboard(self.hwnd)
         return self.keyboard
-    
-    def onWindowFocusIn(self,evt):
-        self.__combobox_init() 
 
-    def onSelected(self,evt):
+    def onWindowFocusIn(self, evt):
+        self.__combobox_init()
+
+    def onSelected(self, evt):
         INFO("onSelected <ComboboxSelected> 事件处理: %s" % evt)
         selected_value = evt.widget.get()
-        if selected_value == 'Application':
-            messagebox.showerror('Title', 'Its not Application')
+        if selected_value == "Application":
+            messagebox.showerror("Title", "Its not Application")
         else:
             windows = selected_value.split()
             hwnd = int(windows[0], 16)
@@ -78,16 +78,16 @@ class Controller:
                 win32gui.BringWindowToTop(hwnd)
                 win32gui.SetForegroundWindow(hwnd)
             sleep(0.5)
-            value = messagebox.askquestion('', '是否控制当前WoW窗口')
+            value = messagebox.askquestion("", "是否控制当前WoW窗口")
             DEBUG("onSelected: %s" % value)
-            if value == 'yes':
-               self.hwnd = hwnd
-               self.keyboard = Virtual_Keyboard(self.hwnd)
+            if value == "yes":
+                self.hwnd = hwnd
+                self.keyboard = Virtual_Keyboard(self.hwnd)
 
-    def onClick(self,evt):
+    def onClick(self, evt):
         INFO("OreHelper <Button-1> 事件处理: %s" % evt)
-        
-        if (self.ui.tk_button_button_func_1.cget("text") == "Stop"):
+
+        if self.ui.tk_button_button_func_1.cget("text") == "Stop":
             self.ui.tk_button_button_func_1.config(text="Start")
             self.orehelper_t.stop()
         else:
@@ -104,10 +104,10 @@ class Controller:
             self.orehelper_t = OreHelper(self, self.hwnd)
             self.orehelper_t.start()
 
-    def onClick2(self,evt):
+    def onClick2(self, evt):
         INFO("KeyHelper <Button-1> 事件处理: %s" % evt)
-       
-        if (self.ui.tk_button_button_func_2.cget("text") == "Stop"):
+
+        if self.ui.tk_button_button_func_2.cget("text") == "Stop":
             self.ui.tk_button_button_func_2.config(text="Start")
             if self.keyhelper_t:
                 self.keyhelper_t.stop()
@@ -120,25 +120,26 @@ class Controller:
             if self.hwnd is None:
                 messagebox.showerror("", "没有绑定WoW窗口?")
                 return
-            
+
             self.ui.tk_button_button_func_2.config(text="Stop")
             INFO("mirror mode: %d" % self.mirror.get())
             self.ui.tk_check_button_func_1.config(state="disabled")
             self.ui.tk_check_button_func_2.config(state="disabled")
             self.ui.tk_check_button_func_3.config(state="disabled")
 
-            self.keyhelper_t = KeyHelper(self, self.hwnd, self.mirror.get(), self.interact.get())
+            self.keyhelper_t = KeyHelper(
+                self, self.hwnd, self.mirror.get(), self.interact.get()
+            )
             self.keyhelper_t.start()
 
             if self.follow.get():
                 self.follow_t = AutoFollow(self, self.hwnd)
                 self.follow_t.start()
 
-
-    def onClick3(self,evt):
+    def onClick3(self, evt):
         INFO("HerbsHelper <Button-1> 事件处理: %s" % evt)
-        
-        if (self.ui.tk_button_button_func_3.cget("text") == "Stop"):
+
+        if self.ui.tk_button_button_func_3.cget("text") == "Stop":
             self.ui.tk_button_button_func_3.config(text="Start")
             self.herbshelper_t.stop()
             self.state = "idel"
@@ -158,10 +159,10 @@ class Controller:
             self.herbshelper_t = HerbsHelper(self, self.hwnd)
             self.herbshelper_t.start()
 
-    def onClick4(self,evt):
+    def onClick4(self, evt):
         INFO("PetMode <Button-1> 事件处理: %s" % evt)
-       
-        if (self.ui.tk_button_button_func_4.cget("text") == "Stop"):
+
+        if self.ui.tk_button_button_func_4.cget("text") == "Stop":
             self.ui.tk_button_button_func_4.config(text="Start")
             if self.petmode_t:
                 self.petmode_t.stop()
@@ -169,11 +170,7 @@ class Controller:
             if self.hwnd is None:
                 messagebox.showerror("", "没有绑定WoW窗口?")
                 return
-            
+
             self.ui.tk_button_button_func_4.config(text="Stop")
             self.petmode_t = PetMode(self, self.hwnd)
             self.petmode_t.start()
-     
-
-
-

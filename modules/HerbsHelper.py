@@ -1,9 +1,8 @@
-
 import threading
 import win32gui
 from time import sleep
 
-from tkinter import END, IntVar, X, Y, LEFT, RIGHT
+from tkinter import END
 
 
 class HerbsHelper(threading.Thread):
@@ -11,7 +10,7 @@ class HerbsHelper(threading.Thread):
     INTERVAL2 = 20
     INTERVAL3 = 600
 
-    def __init__(self, controler, hwnd = int):
+    def __init__(self, controler, hwnd=int):
         super().__init__()
         self.controler = controler
         self.wow_hwnd = hwnd
@@ -37,20 +36,19 @@ class HerbsHelper(threading.Thread):
             if self.state == "stop":
                 break
             # 使用常青袋
-            self.keyboard.key_press('1')
+            self.keyboard.key_press("1")
             tmp = int(self.controler.ui.tk_input_input_amount_3.get())
             self.controler.ui.tk_input_input_amount_3.config(state="normal")
             self.controler.ui.tk_input_input_amount_3.delete(0, END)
             self.controler.ui.tk_input_input_amount_3.insert(0, tmp - 1)
             self.controler.ui.tk_input_input_amount_3.config(state="disable")
-            
+
             sleep(HerbsHelper.INTERVAL2)
             # 使用草药包
-            self.keyboard.key_press('2')
+            self.keyboard.key_press("2")
 
             # 等待10分钟
             sleep(HerbsHelper.INTERVAL3)
-
 
         # 结束
         self.state = "idel"

@@ -1,15 +1,14 @@
-
 import threading
 import win32gui
 
 from time import sleep
-from tkinter import END, IntVar, X, Y, LEFT, RIGHT
+from tkinter import END
 
 
 class OreHelper(threading.Thread):
     INTERVAL = 3
 
-    def __init__(self, controler, hwnd = int):
+    def __init__(self, controler, hwnd=int):
         super().__init__()
         self.controler = controler
         self.wow_hwnd = hwnd
@@ -34,7 +33,7 @@ class OreHelper(threading.Thread):
         for var in range(times):
             if self.state == "stop":
                 return
-            self.keyboard.key_press('1')
+            self.keyboard.key_press("1")
             tmp = int(self.controler.ui.tk_input_input_amount_1.get())
             self.controler.ui.tk_input_input_amount_1.config(state="normal")
             self.controler.ui.tk_input_input_amount_1.delete(0, END)
@@ -49,4 +48,3 @@ class OreHelper(threading.Thread):
     def stop(self):
         if self.state == "run":
             self.state = "stop"
-        
