@@ -85,7 +85,7 @@ class Controller:
                self.keyboard = Virtual_Keyboard(self.hwnd)
 
     def onClick(self,evt):
-        INFO("onClick <Button-1> 事件处理: %s" % evt)
+        INFO("OreHelper <Button-1> 事件处理: %s" % evt)
         
         if (self.ui.tk_button_button_func_1.cget("text") == "Stop"):
             self.ui.tk_button_button_func_1.config(text="Start")
@@ -105,7 +105,7 @@ class Controller:
             self.orehelper_t.start()
 
     def onClick2(self,evt):
-        INFO("onClick2 <Button-1> 事件处理: %s" % evt)
+        INFO("KeyHelper <Button-1> 事件处理: %s" % evt)
        
         if (self.ui.tk_button_button_func_2.cget("text") == "Stop"):
             self.ui.tk_button_button_func_2.config(text="Start")
@@ -136,7 +136,7 @@ class Controller:
 
 
     def onClick3(self,evt):
-        INFO("onClick3 <Button-1> 事件处理: %s" % evt)
+        INFO("HerbsHelper <Button-1> 事件处理: %s" % evt)
         
         if (self.ui.tk_button_button_func_3.cget("text") == "Stop"):
             self.ui.tk_button_button_func_3.config(text="Start")
@@ -159,7 +159,7 @@ class Controller:
             self.herbshelper_t.start()
 
     def onClick4(self,evt):
-        INFO("onClick4 <Button-1> 事件处理: %s" % evt)
+        INFO("PetMode <Button-1> 事件处理: %s" % evt)
        
         if (self.ui.tk_button_button_func_4.cget("text") == "Stop"):
             self.ui.tk_button_button_func_4.config(text="Start")

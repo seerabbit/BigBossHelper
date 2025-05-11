@@ -11,7 +11,7 @@ from ttkbootstrap import Button, Scrollbar, Label, Frame, Combobox, Notebook, Ch
 from utils.Log import *
 from utils.PassWord import KeyWorks
 
-BUILD_VERSION = "V1.2.0"
+BUILD_VERSION = "V1.2.1"
 
 class WinGUI(Tk):
     def __init__(self):

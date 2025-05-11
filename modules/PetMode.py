@@ -16,7 +16,6 @@ class PetMode(threading.Thread):
         self.keyboard = controler.get_keyboard()
         self.signal = threading.Event()
         self.auto_attack_t = None
-        self.auto_follow_t = None
         self.attack = False
         self.float_window = None
 
@@ -37,9 +36,6 @@ class PetMode(threading.Thread):
         if self.auto_attack_t != None:
             self.auto_attack_t.stop()
             self.auto_attack_t = None
-        if self.auto_follow_t != None:
-            self.auto_follow_t.stop()
-            self.auto_follow_t = None
 
         # 结束
         self.state = "idel"
@@ -56,21 +52,21 @@ class PetMode(threading.Thread):
         DEBUG("press %s" % event.name)
         # attack
         if event.name == "f1":
-            if self.attack:
-                self.auto_attack_t.stop()
-                self.auto_attack_t = None
-                self.keyboard.key_press('k')
-                self.attack = False
-                self.float_window.blink(False)
-            else:
-                self.keyboard.key_press('l')
+            self.keyboard.key_press('k')
+            if self.auto_attack_t is None:
                 self.auto_attack_t = self.AutoAttack(self.controler)
                 self.auto_attack_t.start()
                 self.attack = True
-                self.float_window.blink(True)
+            self.float_window.blink(True)
 
         if event.name == "f2":
-            self.keyboard.key_press('f2')
+            if self.auto_attack_t:
+                self.auto_attack_t.stop()
+                self.auto_attack_t = None
+                self.attack = False
+            self.keyboard.key_press('l')
+            self.float_window.blink(False)
+
         if event.name == "f3":
             self.keyboard.key_press('f3')
         if event.name == "f4":
@@ -92,7 +88,7 @@ class PetMode(threading.Thread):
 
             DEBUG("AutoAttack run")
             while(self.state == 'run'):
-                self.keyboard.key_press('1')
+                self.keyboard.key_press('f1')
                 sleep(1)
             DEBUG("AutoAttack stop")
             # 结束

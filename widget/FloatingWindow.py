@@ -31,7 +31,7 @@ class FloatingWindow:
             label.bind("<B1-Motion>", self.on_drag)
 
             self.window.wm_attributes("-alpha", 1)
-            self.blinker = self.AlphaBlinker(self.window, min_alpha=0.3, interval=25)
+            self.blinker = self.AlphaBlinker(self.window, min_alpha=0.2, interval=20)
 
         def start_drag(self, event):
             # 记录初始位置
@@ -49,14 +49,14 @@ class FloatingWindow:
             self.window.geometry(f"+{new_x}+{new_y}")  # 更新窗口坐标
 
         def run(self):
-            INFO("floating window run")
+            DEBUG("floating window run")
 
         def stop(self):
-            INFO("floating window stop")
+            DEBUG("floating window stop")
             self.window.destroy()
 
         def blink(self, enable):
-            INFO("floating window blink")
+            DEBUG("floating window blink")
             if enable:
                 self.blinker.start()
             else:
