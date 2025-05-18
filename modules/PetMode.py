@@ -1,5 +1,6 @@
 import threading
 import keyboard
+import random
 
 from time import sleep
 from utils.Log import DEBUG
@@ -88,7 +89,7 @@ class PetMode(threading.Thread):
             DEBUG("AutoAttack run")
             while self.state == "run":
                 self.keyboard.key_press("f1")
-                sleep(1)
+                sleep(random.uniform(0, 1.5))
             DEBUG("AutoAttack stop")
             # 结束
             self.state = "idel"
