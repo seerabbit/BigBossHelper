@@ -25,7 +25,7 @@ from ttkbootstrap import (
 from utils.Log import INFO, DEBUG
 from utils.PassWord import KeyWorks
 
-BUILD_VERSION = "V1.2.1"
+BUILD_VERSION = "V1.2.2"
 
 
 class WinGUI(Tk):
