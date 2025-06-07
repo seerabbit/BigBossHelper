@@ -70,6 +70,7 @@ class Virtual_Keyboard(object):
             "F12": "123",
             "TAB": "9",
             "ALT": "18",
+            "SPACE": "32",
         }
 
     # 模拟一次按键的输入，间隔值默认0.1S

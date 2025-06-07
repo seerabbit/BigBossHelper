@@ -3,6 +3,7 @@ import keyboard
 import random
 
 from time import sleep
+from modules.Jump import Jump
 from utils.Log import DEBUG
 from widget.FloatingWindow import FloatingWindow
 
@@ -17,6 +18,7 @@ class PetMode(threading.Thread):
         self.keyboard = controler.get_keyboard()
         self.signal = threading.Event()
         self.auto_attack_t = None
+        self.auto_skill_t = None
         self.attack = False
         self.float_window = None
 
@@ -53,20 +55,22 @@ class PetMode(threading.Thread):
         DEBUG("press %s" % event.name)
         # attack
         if event.name == "f1":
-            self.keyboard.key_press("k")
+            self.float_window.blink(True)
+            self.keyboard.key_press("f1")
+            sleep(0.2)
+            self.keyboard.key_press("f")
             if self.auto_attack_t is None:
                 self.auto_attack_t = self.AutoAttack(self.controler)
                 self.auto_attack_t.start()
                 self.attack = True
-            self.float_window.blink(True)
 
         if event.name == "f2":
+            self.float_window.blink(False)
             if self.auto_attack_t:
                 self.auto_attack_t.stop()
                 self.auto_attack_t = None
                 self.attack = False
-            self.keyboard.key_press("l")
-            self.float_window.blink(False)
+            self.keyboard.key_press("f2")
 
         if event.name == "f3":
             self.keyboard.key_press("f3")
@@ -74,6 +78,8 @@ class PetMode(threading.Thread):
             self.keyboard.key_press("f4")
         if event.name == "f5":
             self.keyboard.key_press("f5")
+        if event.name == "space":
+            Jump(self.controler).start()
 
     class AutoAttack(threading.Thread):
         def __init__(self, controler):
@@ -88,8 +94,8 @@ class PetMode(threading.Thread):
 
             DEBUG("AutoAttack run")
             while self.state == "run":
-                self.keyboard.key_press("f1")
-                sleep(random.uniform(0, 1.5))
+                self.keyboard.key_press("f")
+                sleep(random.uniform(0.5, 1))
             DEBUG("AutoAttack stop")
             # 结束
             self.state = "idel"

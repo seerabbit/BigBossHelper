@@ -1,6 +1,7 @@
 import threading
 import keyboard
 
+from modules.Jump import Jump
 from utils.Log import DEBUG
 
 
@@ -80,3 +81,5 @@ class KeyHelper(threading.Thread):
         if self.interact:
             if event.name == "f":
                 self.keyboard.key_press("f")
+        if event.name == "space":
+            Jump(self.controler).start()

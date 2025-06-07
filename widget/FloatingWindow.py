@@ -79,8 +79,15 @@ class FloatingWindow:
             self.current_alpha = max_alpha
             self.is_increasing = False  # 当前是否处于透明度上升阶段
             self._blink_id = None
+            self.state = None
 
         def _animate(self):
+            if self.state == "stop":
+                self.toplevel.after_cancel(self._blink_id)
+                self._blink_id = None
+                self.toplevel.attributes("-alpha", self.max_alpha)
+                return
+             
             # 计算下一阶段的透明度
             if self.is_increasing:
                 self.current_alpha += self.step
@@ -101,14 +108,17 @@ class FloatingWindow:
 
         def start(self):
             """开始闪烁"""
+            DEBUG("floating blink start")
             if not self._blink_id:
                 self.current_alpha = self.max_alpha
                 self.is_increasing = False
+                self.state = "run"
                 self._animate()
 
         def stop(self):
+            DEBUG("floating blink stop")
             """停止闪烁并恢复默认"""
             if self._blink_id:
-                self.toplevel.after_cancel(self._blink_id)
-                self._blink_id = None
-                self.toplevel.attributes("-alpha", self.max_alpha)
+                self.state = "stop"
+            else:
+                DEBUG("floating blink stop, but no blink_id")

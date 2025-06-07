@@ -166,6 +166,8 @@ class Controller:
             self.ui.tk_button_button_func_4.config(text="Start")
             if self.petmode_t:
                 self.petmode_t.stop()
+            if self.follow_t:
+                self.follow_t.stop()
         else:
             if self.hwnd is None:
                 messagebox.showerror("", "没有绑定WoW窗口?")
@@ -174,3 +176,5 @@ class Controller:
             self.ui.tk_button_button_func_4.config(text="Stop")
             self.petmode_t = PetMode(self, self.hwnd)
             self.petmode_t.start()
+            self.follow_t = AutoFollow(self, self.hwnd)
+            self.follow_t.start()
